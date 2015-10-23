@@ -68,7 +68,7 @@
 
                      <div class="checkbox-inline">
                         <label for="rph2mpg">RPH to MPG</label>
-                        <input type="radio" name="conversion" id="rph2mpg" value="rph2mpg">
+                        <input type="radio" name="conversion" id="rph2mpg" value="rph2mpg" checked>
                      </div>
                  </div>
 
@@ -91,13 +91,13 @@ function sanitizeString($str)
 //Convert rods per hoshead to miles per gallon.
 function toMPG($rph2mpg)
 {
-    return ($rph2mpg / 20160);
+    return ($rph2mpg / 25280);
 }
 
-//Conver miles per gallon to rods per hogshead.
+//Convert miles per gallon to rods per hogshead.
 function toRPH($mpg2rph)
 {
-    return($mpg2rph * 20160); 
+    return($mpg2rph * 25280); 
 }
 
 if(isset($_POST['fueleff']))
