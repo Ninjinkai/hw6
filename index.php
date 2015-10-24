@@ -79,15 +79,6 @@
 <!--  PHP code. -->
 <?php
 
-//Prevent malicious input.
-function sanitizeString($str)
-{
-    $str = strip_tags($str);
-    $str = htmlentities($str);
-    $str = stripslashes($str);
-    return $str;
-}
-
 //Convert rods per hoshead to miles per gallon.
 function toMPG($rph2mpg)
 {
@@ -102,19 +93,22 @@ function toRPH($mpg2rph)
 
 if(isset($_POST['fueleff']))
 {
-    // sanitize fueleff
-    $fueleff = sanitizeString($_POST['fueleff']);
-    
-    $output = "Error!";
-    
-    // business logic
-    if(isset($_POST['conversion']) && $_POST['conversion'] === 'mpg2rph')
-    {
-        $output = "Your car gets " . toRPH($fueleff) . " rods to the hogshead and that's the way you likes it!";
-    }
-    else if(isset($_POST['conversion']) && $_POST['conversion'] === 'rph2mpg')
-    {
-        $output = "Your car gets " . toMPG($fueleff) . " miles to the gallon and that's the way you likes it!";       
+    //Prevent invalid input by only processing floats.
+    if (!filter_var($_POST['fueleff'], FILTER_VALIDATE_FLOAT) === false) {
+
+        $fueleff = $_POST['fueleff'];
+
+        // business logic
+        if(isset($_POST['conversion']) && $_POST['conversion'] === 'mpg2rph')
+        {
+            $output = "Your car gets " . round(toRPH($fueleff), 8) . " rods to the hogshead and that's the way you likes it!";
+        }
+        else if(isset($_POST['conversion']) && $_POST['conversion'] === 'rph2mpg')
+        {
+            $output = "Your car gets " . round(toMPG($fueleff), 8) . " miles to the gallon and that's the way you likes it!";       
+        }
+    } else {
+        $output = "Error!  Invalid input!";
     }
     
     // print fueleff
