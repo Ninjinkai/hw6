@@ -79,7 +79,7 @@
 <!--  PHP code. -->
 <?php
 
-//Convert rods per hoshead to miles per gallon.
+//Convert rods per hogshead to miles per gallon.
 function toMPG($rph2mpg)
 {
     return ($rph2mpg / 25280);
@@ -93,12 +93,12 @@ function toRPH($mpg2rph)
 
 if(isset($_POST['fueleff']))
 {
-    //Prevent invalid input by only processing floats.
-    if (!filter_var($_POST['fueleff'], FILTER_VALIDATE_FLOAT) === false) {
-
+    //Prevent invalid input by only processing floats and 0.
+    if (filter_var($_POST['fueleff'], FILTER_VALIDATE_INT) === 0 || !filter_var($_POST['fueleff'], FILTER_VALIDATE_FLOAT) === false)
+    {
         $fueleff = $_POST['fueleff'];
 
-        // business logic
+        //Business logic.
         if(isset($_POST['conversion']) && $_POST['conversion'] === 'mpg2rph')
         {
             $output = "Your car gets " . round(toRPH($fueleff), 8) . " rods to the hogshead and that's the way you likes it!";
@@ -107,8 +107,16 @@ if(isset($_POST['fueleff']))
         {
             $output = "Your car gets " . round(toMPG($fueleff), 8) . " miles to the gallon and that's the way you likes it!";       
         }
-    } else {
-        $output = "Error!  Invalid input!";
+        
+        //Prevent negative input values.
+        if($fueleff < 0)
+        {
+            $output = "Error! Positive values only!";
+        }
+    }
+    else
+    {
+        $output = "Error! Invalid input!";
     }
     
     // print fueleff
